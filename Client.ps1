@@ -18,7 +18,7 @@ function Initialize-Config {
   }
 
   $config.Hostname = Read-Host -Prompt "Hostname"
-  $listener = Read-Host -Prompt "Listener (127.0.0.1 by Default)"
+  $listener = Read-Host -Prompt "Listener (127.0.0.1 by default)"
 
   if ($listener.Length -ne 0) {
     $config.Listener = $listener
@@ -32,19 +32,23 @@ function Initialize-Config {
 $cfdExe = Get-CfdExe
 
 if ($null -EQ $cfdExe) {
+  Write-Host "Cloudflared.exe not found, downloading..."
   $cfdExe = Install-CfdExe
 }
 
 $config = Get-Config
 
 if ($null -EQ $config) {
+  Write-Host "Config.json not found, creating..."
   $config = Initialize-Config
 }
 
 $config = $config.OpenText().ReadToEnd() | ConvertFrom-Json
 
+Write-Host "Starting cloudflared..."
+
 do {
   & "./cloudflared.exe" access tcp --hostname $config.Hostname --listener $config.Listener
   Start-Sleep 1
-  Write-Host "Restarting... (Press Ctrl + C to Exit)"
+  Write-Host "Restarting cloudflared... (press Ctrl + C to exit)"
 } until ($false)
