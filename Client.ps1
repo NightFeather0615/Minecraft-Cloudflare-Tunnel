@@ -29,6 +29,8 @@ function Initialize-Config {
   return Get-Config
 }
 
+$ProgressPreference = "SilentlyContinue"
+
 $cfdExe = Get-CfdExe
 
 if ($null -EQ $cfdExe) {
