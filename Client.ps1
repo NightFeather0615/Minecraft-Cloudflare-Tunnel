@@ -18,7 +18,7 @@ function Initialize-Config {
   }
 
   $config.Hostname = Read-Host -Prompt "Hostname"
-  $listener = Read-Host -Prompt "Listener (127.0.0.1 by default)"
+  $listener = Read-Host -Prompt "Listener (127.0.0.1:25565 by default)"
 
   if ($listener.Length -ne 0) {
     $config.Listener = $listener
